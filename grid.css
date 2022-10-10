@@ -1,3 +1,7 @@
+/*
+    Keep this for backwards compatability
+    For new projects, use bootstrap 4
+*/
 .xs-1 { --xs:calc(100% / 12 * 1); }
 .xs-2 { --xs:calc(100% / 12 * 2); }
 .xs-3 { --xs:calc(100% / 12 * 3); }
