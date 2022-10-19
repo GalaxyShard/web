@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script defer src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+    <script defer src="index.js"></script>
     <title>Web Utilities</title>
 </head>
 <body>
@@ -18,12 +19,12 @@
         <hr>
         <h2 class="font-weight-normal">Bookmarklets</h2>
         <p>Bookmark any link below then click it on any website to activate</p>
-        <!-- possibly use js to read the bookmarklet from a file and set the href -->
-        <a href='javascript:(()=>{function e(){document.getElementById("webtools-main").remove(),document.getElementById("webtools-style").remove(),console.log=window.oldLog,window.oldLog=void 0,console.warn=window.oldWarn,window.oldWarn=void 0,console.error=window.oldConsoleError,window.oldConsoleError=void 0,window.webtoolsLoaded=void 0}if(window.webtoolsLoaded){e();return}window.webtoolsLoaded=!0;var o,t,r=document.createElement("style");r.id="webtools-style",r.textContent="#webtools-main{background-color:#202020;position:fixed;left:5px;top:5px;width:500px;height:300px;z-index:2147483647;box-sizing:border-box;padding:5px;border-radius:5px;resize:both;min-width:300px;min-height:200px;max-height:75vh;max-width:75vw}#webtools-toolbar{position:absolute;left:5px;top:5px;width:35px;height:100%}.webtools-btn{width:25px;height:25px;display:block;background-color:#fff;border-radius:5px;font-size:12px;text-align:center;border:0;margin:5px}#webtools-close{color:red}#webtools-minify{color:grey}#webtools-drag{color:#000;cursor:move}.webtools-btn:hover{background-color:silver}#webtools-console{margin-left:35px;height:calc(100% - 30px);color:#fff;overflow-wrap:break-word;white-space:pre-wrap;overflow-y:scroll}::-webkit-scrollbar{-webkit-appearance:none;width:7px}::-webkit-scrollbar-thumb{border-radius:4px;background-color:#ffffff80;-webkit-box-shadow:0 0 1px rgba(255,255,255,.5)}",document.head.appendChild(r);var n=document.createElement("div");n.id="webtools-main";var l=document.createElement("div");l.id="webtools-toolbar";var d=document.createElement("button");d.id="webtools-close",d.textContent="X",d.classList.add("webtools-btn"),d.addEventListener("click",o=>{e()}),l.appendChild(d);var i=document.createElement("button");i.textContent="-",i.id="webtools-minify",i.classList.add("webtools-btn"),i.addEventListener("click",e=>{}),l.appendChild(i);var a=document.createElement("button");function s(e,o,t){return Math.max(o,Math.min(e,t))}function p(e,o){n.style.left=s(e,-5,window.innerWidth-40)+"px",n.style.top=s(o,-5,window.innerHeight-100)+"px"}function b(e){e.preventDefault(),p(e.clientX+o,e.clientY+t)}function c(){document.removeEventListener("mousemove",b),document.removeEventListener("mouseup",c)}a.textContent="*",a.id="webtools-drag",a.classList.add("webtools-btn"),a.addEventListener("mousedown",e=>{e.preventDefault(),o=-e.clientX+n.offsetLeft,t=-e.clientY+n.offsetTop,document.addEventListener("mousemove",b),document.addEventListener("mouseup",c)}),window.addEventListener("resize",e=>{p(n.offsetLeft,n.offsetTop)}),l.appendChild(a);var w=document.createElement("div");w.id="webtools-console",window.oldLog=console.log,console.log=(...e)=>{var o=document.createElement("div");o.textContent=e.toString(),w.appendChild(o),window.oldLog.apply(console,e)},window.oldWarn=console.warn,console.warn=(...e)=>{var o=document.createElement("div");o.style.color="yellow",o.textContent=e.toString(),w.appendChild(o),window.oldWarn.apply(console,e)},window.oldConsoleError=console.error,console.error=(...e)=>{var o=document.createElement("div");o.style.color="red",o.textContent=e.toString(),w.appendChild(o),window.oldConsoleError.apply(console,e)},n.appendChild(w),n.appendChild(l),document.body.appendChild(n)})();'>
-            JS Console
+
+        <a id="bookmarklet-webtools" href="#">
+            Web Tools
         </a>
         <!--
-            TODO: create a web inspector, made of multiple different bookmarklets/tools.
+            TODO: create a web inspector, possibly made of multiple different bookmarklets/tools.
             example: console(js), source code, view-source, layout(inspect)
             all of these could use the same generated on-screen window
         -->
