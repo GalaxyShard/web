@@ -1,6 +1,6 @@
 javascript:(()=>{
     /* NOTE: only use multiline comments or some browsers wont work */
-    var webtools = window.webtools;
+    var webtools = window.webtoolsData;
     function exit() {
         var main = document.getElementById("webtools-main");
         main.remove();
@@ -14,7 +14,7 @@ javascript:(()=>{
         window.removeEventListener("error", webtools.windowError);
         window.removeEventListener("resize", webtools.windowResize);
 
-        window.webtools = undefined;
+        window.webtoolsData = undefined;
         webtools = undefined;
     }
     if (webtools) {
@@ -22,7 +22,7 @@ javascript:(()=>{
         return;
     }
     webtools = {};
-    window.webtools = webtools;
+    window.webtoolsData = webtools;
 
     function directLog(message, color) {
         var element = document.createElement("div");
