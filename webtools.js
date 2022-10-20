@@ -65,6 +65,7 @@ javascript:(()=>{
             z-index:2147483647;
             box-sizing:border-box;
             border-radius:5px;
+            overflow:auto;
             resize:both;
             min-width:300px;
             min-height:200px;
@@ -115,7 +116,11 @@ javascript:(()=>{
         }
         #webtools-drag {
             color:black;
-            cursor:move;
+            cursor:grab;
+        }
+        #webtools-drag:active {
+            color:black;
+            cursor:grabbing;
         }
         .webtools-btn:hover {
             background-color:#c0c0c0;
@@ -173,7 +178,13 @@ javascript:(()=>{
     minify.id = "webtools-minify";
     minify.classList.add("webtools-btn");
     minify.addEventListener("click", _=>{
-        main.style.visibility = main.style.visibility=="hidden" ? "visible" : "hidden";
+        if (main.style.visibility=="hidden"){
+            main.style.visibility = "visible";
+            minify.textContent = "-";
+        } else {
+            main.style.visibility = "hidden";
+            minify.textContent = "+";
+        }
     });
     toolbar.appendChild(minify);
 
@@ -231,8 +242,10 @@ javascript:(()=>{
         if (!webtools.didLoadSource) {
             webtools.didLoadSource = true;
             source.textContent = "Loading...";
-            var liveSource = new XMLSerializer().serializeToString(document);
-            source.textContent = liveSource;
+            setTimeout(()=>{
+                var liveSource = new XMLSerializer().serializeToString(document);
+                source.textContent = liveSource;
+            }, 0);
         }
     });
 
