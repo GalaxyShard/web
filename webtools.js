@@ -24,15 +24,140 @@ javascript:(()=>{
     webtools = {};
     window.webtoolsData = webtools;
 
+
+    /* MATH */
+    function parseEquation(str) {
+        var index = 0;
+        var token = {type:""};
+        function isDigit(c) { return c>="0" && c<="9"; }
+        function nextTkn() {
+            if (index >= str.length) {
+                token.type = "";
+                token.val = undefined;
+                return token;
+            }
+            while (str[index] === " ") {
+                index += 1;
+            }
+            if (index >= str.length) {
+                token.type = "";
+                token.val = undefined;
+                return token;
+            }
+            if (isDigit(str[index])) {
+                var startIndex = index;
+                index += 1;
+                while (isDigit(str[index]))
+                    index += 1;
+                if (str[index] === ".") {
+                    index += 1;
+                    while (isDigit(str[index]))
+                        index += 1;
+                }
+                token.type = "number";
+                token.val = parseFloat(str.substring(startIndex, index));
+                return token;
+            }
+            var c = str[index];
+            if (c==="+" || c==="-" || c==="*" || c==="/" || c==="^") {
+                index += 1;
+                token.type = "op";
+                token.val = c;
+                return token;
+            }
+            if (c==="(" || c===")") {
+                index += 1;
+                token.type = "parenthesis";
+                token.val = c;
+                return token;
+            }
+            token.type = "";
+            token.val = undefined;
+            return token;
+        }
+        function evalVal() {
+            var val = token.val;
+            if (val === "(") {
+                nextTkn();
+                val = evalAdd();
+                /* token.val===")"*/
+                nextTkn();
+            } else {
+                nextTkn();
+            }
+            return val;
+        }
+        function evalExp(){
+            var lhs = evalVal();
+            if (token.val === "^") {
+                nextTkn();
+                var rhs = evalNeg();
+                return Math.pow(lhs, rhs);
+            }
+            return lhs;
+        }
+        function evalNeg(){
+            if (token.val === "-") {
+                nextTkn();
+                return -evalNeg();
+            }
+            return evalExp();
+        }
+        function evalMul(){
+            var lhs = evalNeg();
+            while (token.val === "*" || token.val === "/") {
+                var mul = token.val==="*";
+                nextTkn();
+                var rhs = evalNeg();
+                if (mul) { lhs *= rhs; }
+                else { lhs /= rhs; }
+            }
+            return lhs;
+        }
+        function evalAdd() {
+            var lhs = evalMul();
+            while (token.val === "+" || token.val === "-") {
+                var add = token.val==="+";
+                nextTkn();
+                var rhs = evalMul();
+                if (add) { lhs += rhs; }
+                else { lhs -= rhs; }
+            }
+            return lhs;
+        }
+        /*console.log("tokens");
+        while (1) {
+            nextTkn();
+            console.log("token: " + token.type + ", " + token.val);
+            if (token.val === undefined) {
+                break;
+            }
+        }
+        console.log("end tokens");
+
+        return undefined;*/
+        
+        nextTkn();
+        /*try {
+            return evalAdd();
+        } catch (error) {
+            console.error(error);
+            return undefined;
+        }*/
+        var result = evalAdd();
+        return result;
+    }
+    /* END OF MATH */
+
     function directLog(message, color) {
         var element = document.createElement("div");
         element.style.color=color;
         element.textContent = message;
-        var shouldScroll = log.scrollTop >= log.scrollHeight-log.clientHeight-5;
-        log.appendChild(element);
+        var shouldScroll = consoleTab.scrollTop >= consoleTab.scrollHeight-consoleTab.clientHeight-5;
+        consoleTab.appendChild(element);
         
         if (shouldScroll) {
-            log.scrollTop += element.offsetHeight;
+            consoleTab.scrollTop += element.offsetHeight;
         }
     }
     function redirectLog(data, color, original) {
@@ -150,6 +275,19 @@ javascript:(()=>{
             overscroll-behavior: none;
             visibility:hidden;
         }
+        #webtools-math {
+            position:absolute;
+            top:25px;
+            left:40px;
+            width:calc(100% - 45px);
+            height:calc(100% - 25px);
+            color:#ffffff;
+        }
+        #webtools-math > input {
+            width:100%;
+            color:#000000;
+            background-color:#ffffff;
+        }
         #webtools-cmd {
             background-color:#404040;
         }
@@ -219,47 +357,63 @@ javascript:(()=>{
     toolbar.appendChild(drag);
     
     /* TOOLBAR END */
+    var tabs = [];
+    function setTab(tab) {
+        tabs.forEach(e => {
+            e.style.visibility = "hidden";
+        });
+        tab.style.visibility = "inherit";
+    }
 
     var tabBar = document.createElement("div");
     tabBar.id = "webtools-tabBar";
     
-    var consoleTab = document.createElement("button");
-    consoleTab.textContent = "console";
-
-    consoleTab.addEventListener("click", _=>{
-        source.style.visibility = "hidden";
-        log.style.visibility = "inherit";
-    });
-    tabBar.appendChild(consoleTab);
-
-    var sourceTab = document.createElement("button");
-    sourceTab.textContent = "source";
-
-    sourceTab.addEventListener("click", _=>{
-        log.style.visibility = "hidden";
-        source.style.visibility = "inherit";
-        
+    function newTab(name, contentId, onOpen) {
+        var openTab = document.createElement("button");
+        openTab.textContent = name;
+        var content = document.createElement("div");
+        content.id = contentId;
+        main.appendChild(content);
+        tabs[tabs.length] = content;
+        openTab.addEventListener("click", _=>{
+            setTab(content);
+            if (onOpen) { onOpen(content); }
+        });
+        tabBar.appendChild(openTab);
+        return content;
+    }
+    var consoleTab = newTab("console", "webtools-console", null);
+    newTab("dom", "webtools-source", e=>{
         if (!webtools.didLoadSource) {
             webtools.didLoadSource = true;
-            source.textContent = "Loading...";
+            e.textContent = "Loading...";
             setTimeout(()=>{
                 var liveSource = new XMLSerializer().serializeToString(document);
-                source.textContent = liveSource;
+                e.textContent = liveSource;
             }, 0);
         }
     });
-
-    tabBar.appendChild(sourceTab);
-
+    newTab("math", "webtools-math", e=>{
+        if (!webtools.loadedMath) {
+            webtools.loadedMath = true;
+            var input = document.createElement("input");
+            input.addEventListener("input", e => {
+                var str = e.currentTarget.value;
+                setTimeout(()=>{
+                    /* var evaluated = parseEquation(e.currentTarget.value);*/
+                    var evaluated = parseEquation(str);
+                    output.textContent = evaluated || "___";
+                }, 0);
+            });
+            e.appendChild(input);
+            var output = document.createElement("p");
+            output.textContent = "___";
+            e.appendChild(output);
+        }
+    });
+    setTab(consoleTab);
     main.appendChild(tabBar);
 
-    var source = document.createElement("div");
-    source.id = "webtools-source";
-    /* possibly delay loading source until tab is clicked on */
-    main.appendChild(source);
-
-    var log = document.createElement("div");
-    log.id = "webtools-console";
 
     webtools.oldLog = console.log;
     console.log = (...data)=>{
@@ -275,9 +429,6 @@ javascript:(()=>{
     };
     window.addEventListener("error", windowError);
 
-    var log = document.createElement("div");
-    log.id = "webtools-console";
-    main.appendChild(log);
     main.appendChild(toolbar);
     document.body.appendChild(main);
 })();
