@@ -1,4 +1,120 @@
 javascript:(()=>{
+    const webtoolsStyle = `
+    #webtools-main *, #webtools-main {
+        all:revert;
+        box-sizing:border-box;
+    }
+    #webtools-main {
+        font-size:14px;
+        font-family:monospace;
+        background-color:#000000;
+        position:fixed;
+        left:5px;
+        top:5px;
+        width:500px;
+        height:300px;
+        z-index:2147483647;
+        border-radius:5px;
+        overflow:auto;
+        resize:both;
+        min-width:300px;
+        min-height:200px;
+        max-height:75vh;
+        max-width:75vw;
+    }
+    #webtools-toolbar {
+        visibility:visible;
+        position:absolute;
+        left:0px;
+        top:0px;
+        width:35px;
+        height:95px;
+        background-color:#404040;
+        border-radius:5px;
+    }
+    #webtools-tabBar {
+        position:absolute;
+        left:40px;
+        top:0;
+        height:20px;
+    }
+    #webtools-tabBar button {
+        margin:0 5px 0 0;
+        background-color:#c0c0c0;
+        border-radius:0 0 5px 5px;
+        border:0;
+    }
+    #webtools-main .webtools-btn {
+        width:25px;
+        height:25px;
+        display:block;
+        background-color:#ffffff;
+        border-radius:5px;
+        font-size:12px;
+        text-align:center;
+        border:0;
+        margin:5px;
+    }
+    #webtools-close {
+        color:red;
+    }
+    #webtools-minify {
+        color:grey;
+    }
+    #webtools-drag {
+        color:black;
+        cursor:grab;
+    }
+    #webtools-drag:active {
+        color:black;
+        cursor:grabbing;
+    }
+    #webtools-main .webtools-btn:hover {
+        background-color:#c0c0c0;
+    }
+    #webtools-console {
+        position:absolute;
+        top:25px;
+        left:40px;
+        width:calc(100% - 45px);
+        height:calc(100% - 55px);
+        color:#ffffff;
+        overflow-wrap:break-word;
+        white-space:pre-wrap;
+        overflow-y:scroll;
+        overscroll-behavior: none;
+    }
+    #webtools-source {
+        position:absolute;
+        top:25px;
+        left:40px;
+        width:calc(100% - 45px);
+        height:calc(100% - 25px);
+        color:#ffffff;
+        overflow-wrap:break-word;
+        white-space:pre-wrap;
+        overflow-y:scroll;
+        overscroll-behavior: none;
+        visibility:hidden;
+    }
+    #webtools-math {
+        position:absolute;
+        top:25px;
+        left:40px;
+        width:calc(100% - 45px);
+        height:calc(100% - 25px);
+        color:#ffffff;
+    }
+    #webtools-math > input {
+        width:100%;
+        color:#000000;
+        background-color:#ffffff;
+    }
+    #webtools-cmd {
+        background-color:#404040;
+    }
+    `;
+
     /* NOTE: only use multiline comments or some browsers wont work */
     var webtools = window.webtoolsData;
     function exit() {
@@ -177,121 +293,7 @@ javascript:(()=>{
     var style = document.createElement("style");
     style.id = "webtools-style";
     /* possibly use http request to get instead of embedding */
-    style.textContent = `
-        #webtools-main {
-            font-size:14px;
-            font-family:monospace;
-            background-color:#000000;
-            position:fixed;
-            left:5px;
-            top:5px;
-            width:500px;
-            height:300px;
-            z-index:2147483647;
-            box-sizing:border-box;
-            border-radius:5px;
-            overflow:auto;
-            resize:both;
-            min-width:300px;
-            min-height:200px;
-            max-height:75vh;
-            max-width:75vw;
-        }
-        #webtools-toolbar {
-            visibility:visible;
-            box-sizing:border-box;
-            position:absolute;
-            left:0px;
-            top:0px;
-            width:35px;
-            height:95px;
-            background-color:#404040;
-            border-radius:5px;
-        }
-        #webtools-tabBar {
-            position:absolute;
-            left:40px;
-            top:0;
-            height:20px;
-            /*background-color:#404040;*/
-        }
-        #webtools-tabBar button {
-            box-sizing:border-box;
-            margin:0 5px 0 0;
-            background-color:#c0c0c0;
-            border-radius:0 0 5px 5px;
-            border:0;
-        }
-        .webtools-btn {
-            width:25px;
-            height:25px;
-            display:block;
-            background-color:#ffffff;
-            border-radius:5px;
-            font-size:12px;
-            text-align:center;
-            border:0;
-            margin:5px;
-        }
-        #webtools-close {
-            color:red;
-        }
-        #webtools-minify {
-            color:grey;
-        }
-        #webtools-drag {
-            color:black;
-            cursor:grab;
-        }
-        #webtools-drag:active {
-            color:black;
-            cursor:grabbing;
-        }
-        .webtools-btn:hover {
-            background-color:#c0c0c0;
-        }
-        #webtools-console {
-            position:absolute;
-            top:25px;
-            left:40px;
-            width:calc(100% - 45px);
-            height:calc(100% - 55px);
-            color:#ffffff;
-            overflow-wrap:break-word;
-            white-space:pre-wrap;
-            overflow-y:scroll;
-            overscroll-behavior: none;
-        }
-        #webtools-source {
-            position:absolute;
-            top:25px;
-            left:40px;
-            width:calc(100% - 45px);
-            height:calc(100% - 25px);
-            color:#ffffff;
-            overflow-wrap:break-word;
-            white-space:pre-wrap;
-            overflow-y:scroll;
-            overscroll-behavior: none;
-            visibility:hidden;
-        }
-        #webtools-math {
-            position:absolute;
-            top:25px;
-            left:40px;
-            width:calc(100% - 45px);
-            height:calc(100% - 25px);
-            color:#ffffff;
-        }
-        #webtools-math > input {
-            width:100%;
-            color:#000000;
-            background-color:#ffffff;
-        }
-        #webtools-cmd {
-            background-color:#404040;
-        }
-    `;
+    style.textContent = webtoolsStyle;
     document.head.appendChild(style);
     var main = document.createElement("div");
     main.id = "webtools-main";
