@@ -1,0 +1,9 @@
+a {
+    display:block;
+
+    color:grey;
+    text-decoration:none;
+}
+a.loaded {
+    color:#007bff;
+}
